@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+    <head>
+        <title>Spring Security Example</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+        <style>
+            .
+        </style>
+    </head>
+    <body>
+        <div class="d-flex flex-column justify-content-center align-items-center">
+            <div th:if="${param.error}">
+                <p class="lead" th:text="${error}"></p>
+            </div>
+            <h1>Welcome!</h1>
+
+            <div sec:authorize="hasAuthority('ROLE_ADMIN')">
+                <a class="btn btn-outline-primary" th:href="@{/user}">User List</a>
+            </div>
+            <a class="btn btn-outline-primary mt-2" th:href="@{/stadium}">Create Stadium</a>
+            <a class="btn btn-outline-primary mt-2" th:href="@{/referee}">Create Referee</a>
+            <a class="btn btn-outline-primary mt-2" th:href="@{/sportsman}">Create Sportsman</a>
+            <a class="btn btn-outline-primary mt-2" th:href="@{/competition/user}">Invite Sportsmen</a>
+
+            <form th:action="@{/competition}" method="post">
+                <button class="btn btn-success mt-2" type="submit">Create Competition</button>
+            </form>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    </body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+    <head>
+        <meta charset="UTF-8">
+        <title>Invite Sportsmen</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    </head>
+    <body>
+        <div class="d-flex flex-column justify-content-center align-items-center">
+            <div th:each="sportsman : ${sportsmen}">
+                <form th:action="@{/competition/{id}/inviteSportsman(id = ${compId})}" method="post">
+                    <div class="container">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <label th:text="${sportsman.getFullName()}"></label>
+                            </div>
+                            <div class="col-auto" th:if="${sportsman.getCompetition() == null}">
+                                <button class="btn btn-success" type="submit" th:text="Invite"></button>
+                            </div>
+                            <div class="col-auto" th:if="${sportsman.getCompetition() != null}">
+                                <button class="btn btn-success" disabled type="submit">Invited!</button>
+                            </div>
+                        </div>
+                    </div>
+                    <input  type="hidden" th:value="${sportsman.getId()}" th:name="sportsmanId"/>
+                </form>
+            </div>
+            <button class="btn btn-success mt-2">
+                <a class="btn btn-success" th:href="@{/home}">Save</a>
+            </button>
+        </div>
+        <button class="btn btn-warning mt-2" type="submit">
+            <a class="btn btn-warning mt-2" th:href="@{/home}">
+                Home
+            </a>
+        </button>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </body>
+</html>
