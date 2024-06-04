@@ -1,5 +1,6 @@
 package edu.katsala.competitionmanager.dao;
 
+import edu.katsala.competitionmanager.model.Competition;
 import edu.katsala.competitionmanager.model.Sportsman;
 import edu.katsala.competitionmanager.repository.SportsmanRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,5 +24,9 @@ public class SportsmanDAO {
     public Sportsman getSportsmanById(Long id) {
         return sportsmanRepository.findById(id)
                 .orElse(null);
+    }
+
+    public List<Sportsman> getSportsmanByCompetition(Competition competition) {
+        return sportsmanRepository.getAllByCompetition(competition);
     }
 }

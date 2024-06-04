@@ -21,7 +21,7 @@
                 <div th:each="competition : ${competitions}">
                     <tr>
                         <td th:text="${competition.getName()}"></td>
-                        <td><a th:href="@{/competition/{id}/inviteSportsmen(id = ${competition.getId()})}" th:text="Invite"></a></td>
+                        <td><a th:href="@{/competition/{id}/inviteSportsmen(id=${competition.getId()})}" th:text="'Invite'"></a></td>
                     </tr>
                 </div>
                 </tbody>

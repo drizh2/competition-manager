@@ -11,6 +11,8 @@ import edu.katsala.competitionmanager.repository.SportsmanRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CompetitionService {
@@ -66,5 +68,24 @@ public class CompetitionService {
         sportsman.setCompetition(competition);
 
         sportsmanRepository.save(sportsman);
+    }
+
+    public Integer getBudgetForCompetition(Long compId) {
+        Competition competition = competitionDAO.getCompetitionById(compId);
+        List<Sportsman> sportsmen = sportsmanDAO.getSportsmanByCompetition(competition);
+
+        Integer budget = competition.getBudget();
+
+        for (Sportsman sportsman : sportsmen) {
+            budget -= sportsman.getSalary();
+        }
+
+        return budget;
+    }
+
+    public Integer decreaseBudget(Integer budget, Long sportsmanId) {
+        Sportsman sportsman = sportsmanDAO.getSportsmanById(sportsmanId);
+
+        return budget - sportsman.getSalary();
     }
 }

@@ -10,10 +10,7 @@ import edu.katsala.competitionmanager.service.CompetitionService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -111,24 +108,48 @@ public class CompetitionController {
     }
 
     @GetMapping("/{compId}/inviteSportsmen")
-    public String getInviteSportsmen(@PathVariable Long compId, Model model) {
+    public String getInviteSportsmen(@PathVariable Long compId,
+                                     @RequestParam(value = "budget", required = false) Integer budget,
+                                     @RequestParam(value = "error", required = false) String error,
+                                     Model model) {
         List<Sportsman> sportsmen = sportsmanDAO.getAllSportsmen();
+
+        model.addAttribute("sportsmen", sportsmen);
+        model.addAttribute("compId", compId);
 
         if (sportsmen.isEmpty()) {
             return "redirect:/home?error=no_sportsmen";
         }
 
-        model.addAttribute("sportsmen", sportsmen);
-        model.addAttribute("compId", compId);
+        if (error != null) {
+            model.addAttribute("budget", budget);
+            model.addAttribute("error", "No budget to invite this sportsman!");
+            return "competitionInviteSportsmen";
+        }
+
+        if (budget == null) {
+            Integer requestedBudget = competitionService.getBudgetForCompetition(compId);
+            model.addAttribute("budget", requestedBudget);
+        } else {
+            model.addAttribute("budget", budget);
+        }
         return "competitionInviteSportsmen";
     }
 
     @PostMapping("/{compId}/inviteSportsman")
     public String inviteSportsman(@PathVariable Long compId,
+                                  @RequestParam(value = "budget", required = false) Integer budget,
                                   Long sportsmanId) {
+
+        Integer tempBudget = competitionService.decreaseBudget(budget, sportsmanId);
+
+        if (tempBudget < 0) {
+            return "redirect:/competition/" + compId + "/inviteSportsmen?budget=" + budget + "&error=no_budget";
+        }
+
         competitionService.inviteSportsman(compId, sportsmanId);
 
-        return "redirect:/competition/" + compId + "/inviteSportsmen";
+        return "redirect:/competition/" + compId + "/inviteSportsmen?budget=" + tempBudget;
     }
 
 }

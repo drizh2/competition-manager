@@ -10,8 +10,12 @@
     </head>
     <body>
         <div class="d-flex flex-column justify-content-center align-items-center">
+            <p th:text="'Budget : ' + ${budget}"></p>
+            <div th:if="${error ne null}">
+                <p th:text="${error}"></p>
+            </div>
             <div th:each="sportsman : ${sportsmen}">
-                <form th:action="@{/competition/{id}/inviteSportsman(id = ${compId})}" method="post">
+                <form th:action="@{/competition/{id}/inviteSportsman(id = ${compId}, budget=${budget})}" method="post">
                     <div class="container">
                         <div class="row align-items-center">
                             <div class="col-auto">
